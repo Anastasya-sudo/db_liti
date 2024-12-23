@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Админ-Панель</title>
+</head>
+<body>
+    <h1>Добро пожаловать в админ-панель</h1>
+
+    <!-- Форма для добавления нового участника -->
+    <h2>Добавить нового участника:</h2>
+    <form method="post" action="/admin/add_participant">
+        <label for="surname">Фамилия:</label><br>
+        <input type="text" name="surname" required><br>
+        <label for="name">Имя:</label><br>
+        <input type="text" name="name" required><br>
+        <label for="patronymic">Отчество:</label><br>
+        <input type="text" name="patronymic" required><br>
+        <label for="academic_degree">Ученая степень:</label><br>
+        <input type="text" name="academic_degree"><br>
+        <label for="academic_title">Ученое звание:</label><br>
+        <input type="text" name="academic_title"><br>
+        <label for="scientific_field">Научное направление:</label><br>
+        <input type="text" name="scientific_field"><br>
+        <label for="workplace">Место работы:</label><br>
+        <input type="text" name="workplace"><br>
+        <label for="department">Кафедра:</label><br>
+        <input type="text" name="department"><br>
+        <label for="position">Должность:</label><br>
+        <input type="text" name="position"><br>
+        <label for="country">Страна:</label><br>
+        <input type="text" name="country"><br>
+        <label for="city">Город:</label><br>
+        <input type="text" name="city"><br>
+        <label for="postal_code">Почтовый индекс:</label><br>
+        <input type="text" name="postal_code"><br>
+        <label for="address">Адрес:</label><br>
+        <input type="text" name="address"><br>
+        <label for="work_phone">Рабочий телефон:</label><br>
+        <input type="text" name="work_phone"><br>
+        <label for="home_phone">Домашний телефон:</label><br>
+        <input type="text" name="home_phone"><br>
+        <label for="email">Email:</label><br>
+        <input type="email" name="email"><br><br>
+
+        <button type="submit">Добавить участника</button>
+    </form>
+
+
+
+    <h2>Список участников:</h2>
+    <ul>
+        {% for participant in participants %}
+        <li>
+            {{participant.id}} {{ participant.surname }} {{ participant.name }} {{ participant.patronymic }} - {{ participant.position }}
+            <!-- Можно добавить ссылки на редактирование или просмотр деталей участника -->
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">На главную</a>
+</body>
+</html>

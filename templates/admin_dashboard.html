@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Админ-Панель</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal.active, .modal-overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Добро пожаловать в админ-панель</h1>
+
+    <!-- Контекстное меню -->
+    <h2>Действия</h2>
+    <button onclick="openModal('add-participant-modal')">Добавить участника</button>
+    <button onclick="openModal('add-participation-modal')">Добавить встречу</button>
+
+    <!-- Модальное окно для добавления участника -->
+    <div id="add-participant-modal" class="modal">
+        <h2>Добавить нового участника</h2>
+        <form method="post" action="/admin/add_participant">
+            <label for="surname">Фамилия:</label><br>
+            <input type="text" name="surname" required><br>
+            <label for="name">Имя:</label><br>
+            <input type="text" name="name" required><br>
+            <label for="patronymic">Отчество:</label><br>
+            <input type="text" name="patronymic" required><br>
+            <label for="academic_degree">Ученая степень:</label><br>
+            <input type="text" name="academic_degree"><br>
+            <label for="academic_title">Ученое звание:</label><br>
+            <input type="text" name="academic_title"><br>
+            <label for="scientific_field">Научное направление:</label><br>
+            <input type="text" name="scientific_field"><br>
+            <label for="workplace">Место работы:</label><br>
+            <input type="text" name="workplace"><br>
+            <label for="department">Кафедра:</label><br>
+            <input type="text" name="department"><br>
+            <label for="position">Должность:</label><br>
+            <input type="text" name="position"><br>
+            <label for="country">Страна:</label><br>
+            <input type="text" name="country"><br>
+            <label for="city">Город:</label><br>
+            <input type="text" name="city"><br>
+            <label for="postal_code">Почтовый индекс:</label><br>
+            <input type="text" name="postal_code"><br>
+            <label for="address">Адрес:</label><br>
+            <input type="text" name="address"><br>
+            <label for="work_phone">Рабочий телефон:</label><br>
+            <input type="text" name="work_phone"><br>
+            <label for="home_phone">Домашний телефон:</label><br>
+            <input type="text" name="home_phone"><br>
+            <label for="email">Email:</label><br>
+            <input type="email" name="email"><br><br>
+            <button type="submit">Добавить участника</button>
+            <button type="button" onclick="closeModal('add-participant-modal')">Закрыть</button>
+        </form>
+    </div>
+
+    <!-- Модальное окно для добавления встречи -->
+   <div id="add-participation-modal" class="modal">
+       <h2>Добавить встречу</h2>
+       <form method="post" action="/admin/add_participation/">
+            <!-- Скрытое поле для передачи participant_id -->
+            <label for="participant_id">ID участника:</label><br>
+            <input type="number" name="participant_id" required><br>
+            <label for="role">Роль:</label><br>
+            <input type="text" name="role"><br>
+            <label for="first_invitation_date">Дата первого приглашения (YYYY-MM-DD):</label><br>
+            <input type="date" name="first_invitation_date"><br>
+            <label for="application_date">Дата подачи заявки (YYYY-MM-DD):</label><br>
+            <input type="date" name="application_date"><br>
+            <label for="report_title">Название доклада:</label><br>
+            <input type="text" name="report_title"><br>
+            <label for="thesis_received">Тезисы получены:</label><br>
+            <input type="checkbox" name="thesis_received"><br>
+            <label for="second_invitation_date">Дата второго приглашения (YYYY-MM-DD):</label><br>
+            <input type="date" name="second_invitation_date"><br>
+            <label for="payment_date">Дата оплаты (YYYY-MM-DD):</label><br>
+            <input type="date" name="payment_date"><br>
+            <label for="payment_amount">Сумма оплаты:</label><br>
+            <input type="number" name="payment_amount"><br>
+            <label for="arrival_date">Дата приезда (YYYY-MM-DD):</label><br>
+            <input type="date" name="arrival_date"><br>
+            <label for="departure_date">Дата отъезда (YYYY-MM-DD):</label><br>
+            <input type="date" name="departure_date"><br>
+            <label for="hotel_needed">Нужна гостиница:</label><br>
+            <input type="checkbox" name="hotel_needed"><br><br>
+            <button type="submit">Добавить встречу</button>
+            <button type="button" onclick="closeModal('add-participation-modal')">Закрыть</button>
+        </form>
+    </div>
+
+
+    <!-- Overlay для модальных окон -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeAllModals()"></div>
+
+      <h3>Участники, приглашенные на дату:</h3>
+    <form method="get" action="/admin/participants/invited">
+        <label for="invitation_date">Дата приглашения (YYYY-MM-DD):</label><br>
+        <input type="date" name="invitation_date"> required<br>
+        <button type="submit">Показать</button>
+    </form>
+
+    <h3>Участники, оплатившие в период:</h3>
+    <form method="get" action="/participants/paid">
+        <label for="start_date">Дата начала (YYYY-MM-DD):</label><br>
+        <input type="date" name="start_date"><br>
+        <label for="end_date">Дата окончания (YYYY-MM-DD):</label><br>
+        <input type="date" name="end_date"><br>
+        <button type="submit">Показать</button>
+    </form>
+
+    <h3>Тезисы докладов по городу:</h3>
+    <form method="get" action="/participants/reports">
+        <label for="city">Город:</label><br>
+        <input type="text" name="city" required><br>
+        <button type="submit">Показать</button>
+    </form>
+
+    <h3>Участники, нуждающиеся в гостинице по городу:</h3>
+    <form method="get" action="/participants/hotel">
+        <label for="city">Город:</label><br>
+        <input type="text" name="city" required><br>
+        <button type="submit">Показать</button>
+    </form>
+
+    <h2>Список участников:</h2>
+    <ul>
+        {% for participant in participants %}
+        <li>
+            {{participant.id}} {{ participant.surname }} {{ participant.name }} {{ participant.patronymic }} - {{ participant.position }}
+            <!-- Можно добавить ссылки на редактирование или просмотр деталей участника -->
+        </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

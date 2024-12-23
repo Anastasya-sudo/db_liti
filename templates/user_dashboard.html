@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Панель пользователя</title>
+</head>
+<body>
+    <h1>Добро пожаловать, {{ participant.surname }}!</h1>
+    <h2>Ваша информация:</h2>
+    <p>Фамилия: {{ participant.surname }}</p>
+    <p>Имя: {{ participant.name }}</p>
+    <p>Отчество: {{ participant.patronymic }}</p>
+    <p>Должность: {{ participant.position }}</p>
+    <p>Научное направление: {{ participant.scientific_field }}</p>
+    <p>Email: {{ participant.email }}</p>
+    <a href="/">На главную</a>
+</body>
+</html>
